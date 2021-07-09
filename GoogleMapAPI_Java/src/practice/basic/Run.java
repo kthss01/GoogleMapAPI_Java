@@ -1,4 +1,4 @@
-package practice;
+package practice.basic;
 
 public class Run {
 	public static void main(String[] args) {

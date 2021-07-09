@@ -1,4 +1,4 @@
-package practice;
+package practice.basic;
 
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
