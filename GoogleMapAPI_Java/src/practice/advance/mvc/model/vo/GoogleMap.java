@@ -1,30 +1,63 @@
 package practice.advance.mvc.model.vo;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import javax.swing.JOptionPane;
 
 public class GoogleMap {
 	private final static String BASIC_URL = "https://maps.googleapis.com/maps/api/staticmap";
 	private String key;
-	
+
 	private boolean isChanged; // 상태 변화시 체크
-	
-	private String center;
-	private int zoom;
-	private int sizeX;
-	private int sizeY;
-	
+
+	private String center; // 주소나 위도,경도 형태로 표현
+	private int zoom; // 0 ~ 21 정도로
+	private int sizeX; // 이미지 크기 X (가로)
+	private int sizeY; // 이미지 크기 Y (세로)
+	// scale은 넘어가자 필요하면 그 때 만들기로
+	private String maptype = ""; // roadmap (default), satellite, terrain, hybrid 중 enum을 만들지 해야할 거 같음
+	private Markers markers; // marker들 여러개 따로 클래스로 처리하려고함
+	// path도 일단 pass
+
 	private StringBuilder sb;
-	
+
 	public GoogleMap() {
 		key = JOptionPane.showInputDialog("key : ");
+		markers = new Markers();
 	}
-	
+
 	public GoogleMap(String center, int zoom, int sizeX, int sizeY) {
 		this();
 		this.center = center;
 		this.zoom = zoom;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
+	}
+
+	public GoogleMap(String center, int zoom, int sizeX, int sizeY, String maptype) {
+		this(center, zoom, sizeX, sizeY);
+		this.center = center;
+		this.zoom = zoom;
+		this.sizeX = sizeX;
+		this.sizeY = sizeY;
+		this.maptype = maptype;
+	}
+
+	public Markers getMarkers() {
+		return markers;
+	}
+
+	public void setMarkers(Markers markers) {
+		this.markers = markers;
+	}
+
+	public String getMaptype() {
+		return maptype;
+	}
+
+	public void setMaptype(String maptype) {
+		this.maptype = maptype;
 	}
 
 	public String getKey() {
@@ -71,7 +104,6 @@ public class GoogleMap {
 		return BASIC_URL;
 	}
 
-	
 	public boolean isChanged() {
 		return isChanged;
 	}
@@ -87,23 +119,32 @@ public class GoogleMap {
 		isChanged = true;
 		center = "서울";
 	}
-	
+
 	// url 생성
 	@Override
 	public String toString() {
 		sb = new StringBuilder();
-		
+
 		sb.append(BASIC_URL).append("?");
-		
-		sb.append("center=").append(center).append("&");
+
+		try {
+			sb.append("center=").append(URLEncoder.encode(center, "UTF-8")).append("&");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
 		sb.append("zoom=").append(zoom).append("&");
 		sb.append("size=").append(sizeX).append("x").append(sizeY).append("&");
-		
-		
+
+		if (!maptype.equals(""))
+			sb.append("maptype=").append(maptype).append("&");
+
+		if (markers.getMarkers().size() != 0)
+			sb.append("markers=").append(markers.toString()).append("&");
+			
 		sb.append("key=").append(key);
-		
+
 		return sb.toString();
 	}
-	
-	
+
 }
