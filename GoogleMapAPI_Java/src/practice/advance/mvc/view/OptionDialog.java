@@ -23,12 +23,12 @@ import javax.swing.JCheckBox;
 public class OptionDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
+	private JTextField textFieldLocation;
+	private JTextField textFieldSizeX;
+	private JTextField textFieldSizeY;
+	private JTextField textFieldMarkerLocation;
+	private JTextField textFieldMarkerColor;
+	private JTextField textFieldMarkerLabel;
 
 	public static void main(String[] args) {
 		try {
@@ -50,108 +50,116 @@ public class OptionDialog extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(12, 23, 57, 15);
-		contentPanel.add(lblNewLabel);
+		JLabel lblLocation = new JLabel("Location");
+		lblLocation.setBounds(12, 23, 57, 15);
+		contentPanel.add(lblLocation);
 		
-		textField = new JTextField();
-		textField.setBounds(81, 20, 126, 21);
-		contentPanel.add(textField);
-		textField.setColumns(10);
+		textFieldLocation = new JTextField();
+		textFieldLocation.setBounds(81, 20, 126, 21);
+		contentPanel.add(textFieldLocation);
+		textFieldLocation.setColumns(10);
 		
-		JLabel lblNewLabel_1 = new JLabel("New label");
-		lblNewLabel_1.setBounds(12, 102, 57, 15);
-		contentPanel.add(lblNewLabel_1);
+		JLabel lblZoomLevel = new JLabel("Zoom Level");
+		lblZoomLevel.setBounds(12, 102, 73, 15);
+		contentPanel.add(lblZoomLevel);
 		
-		JSpinner spinner = new JSpinner();
-		spinner.setBounds(109, 99, 29, 22);
-		contentPanel.add(spinner);
+		JSpinner spinnerZoomLevel = new JSpinner();
+		spinnerZoomLevel.setBounds(109, 99, 29, 22);
+		contentPanel.add(spinnerZoomLevel);
 		
-		JLabel lblNewLabel_2 = new JLabel("New label");
-		lblNewLabel_2.setBounds(12, 62, 57, 15);
-		contentPanel.add(lblNewLabel_2);
+		JLabel lblSize = new JLabel("Size");
+		lblSize.setBounds(12, 62, 57, 15);
+		contentPanel.add(lblSize);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(81, 58, 57, 21);
-		contentPanel.add(textField_1);
-		textField_1.setColumns(10);
+		textFieldSizeX = new JTextField();
+		textFieldSizeX.setBounds(81, 58, 57, 21);
+		contentPanel.add(textFieldSizeX);
+		textFieldSizeX.setColumns(10);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(150, 58, 57, 21);
-		contentPanel.add(textField_2);
+		textFieldSizeY = new JTextField();
+		textFieldSizeY.setColumns(10);
+		textFieldSizeY.setBounds(150, 58, 57, 21);
+		contentPanel.add(textFieldSizeY);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(81, 138, 57, 21);
-		contentPanel.add(comboBox);
+		JComboBox comboBoxMaptype = new JComboBox();
+		comboBoxMaptype.setBounds(81, 138, 126, 21);
+		contentPanel.add(comboBoxMaptype);
 		
-		JLabel lblNewLabel_3 = new JLabel("New label");
-		lblNewLabel_3.setBounds(12, 141, 57, 15);
-		contentPanel.add(lblNewLabel_3);
+		JLabel lblMaptype = new JLabel("Maptype");
+		lblMaptype.setBounds(12, 141, 57, 15);
+		contentPanel.add(lblMaptype);
 		
-		JList list = new JList();
-		list.setBounds(245, 208, 156, 210);
-		contentPanel.add(list);
+		JList listMarker = new JList();
+		listMarker.setBounds(245, 241, 156, 177);
+		contentPanel.add(listMarker);
 		
-		JPanel panel = new JPanel();
-		panel.setBounds(235, 10, 166, 157);
-		contentPanel.add(panel);
-		panel.setLayout(null);
+		JPanel panelMarkerParameter = new JPanel();
+		panelMarkerParameter.setBounds(235, 10, 166, 188);
+		contentPanel.add(panelMarkerParameter);
+		panelMarkerParameter.setLayout(null);
 		
-		JLabel lblNewLabel_4 = new JLabel("New label");
-		lblNewLabel_4.setBounds(12, 10, 57, 15);
-		panel.add(lblNewLabel_4);
+		JLabel lblMarkerLocation = new JLabel("Location");
+		lblMarkerLocation.setBounds(12, 10, 57, 15);
+		panelMarkerParameter.add(lblMarkerLocation);
 		
-		textField_3 = new JTextField();
-		textField_3.setBounds(81, 7, 73, 21);
-		panel.add(textField_3);
-		textField_3.setColumns(10);
+		textFieldMarkerLocation = new JTextField();
+		textFieldMarkerLocation.setBounds(81, 7, 73, 21);
+		panelMarkerParameter.add(textFieldMarkerLocation);
+		textFieldMarkerLocation.setColumns(10);
 		
-		JLabel lblNewLabel_5 = new JLabel("New label");
-		lblNewLabel_5.setBounds(12, 48, 57, 15);
-		panel.add(lblNewLabel_5);
+		JLabel lblMarkerSize = new JLabel("Size");
+		lblMarkerSize.setBounds(12, 43, 57, 15);
+		panelMarkerParameter.add(lblMarkerSize);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(81, 45, 73, 21);
-		panel.add(comboBox_1);
+		JComboBox comboBoxMarkerSize = new JComboBox();
+		comboBoxMarkerSize.setBounds(81, 42, 73, 21);
+		panelMarkerParameter.add(comboBoxMarkerSize);
 		
-		JLabel lblNewLabel_6 = new JLabel("New label");
-		lblNewLabel_6.setBounds(12, 90, 57, 15);
-		panel.add(lblNewLabel_6);
+		JLabel lblMarkerColor = new JLabel("Color");
+		lblMarkerColor.setBounds(12, 71, 57, 15);
+		panelMarkerParameter.add(lblMarkerColor);
 		
-		textField_4 = new JTextField();
-		textField_4.setBounds(81, 87, 73, 21);
-		panel.add(textField_4);
-		textField_4.setColumns(10);
+		textFieldMarkerColor = new JTextField();
+		textFieldMarkerColor.setBounds(81, 85, 73, 21);
+		panelMarkerParameter.add(textFieldMarkerColor);
+		textFieldMarkerColor.setColumns(10);
 		
-		JLabel lblNewLabel_7 = new JLabel("New label");
-		lblNewLabel_7.setBounds(12, 127, 57, 15);
-		panel.add(lblNewLabel_7);
+		JLabel lblMarkerLabel = new JLabel("Label");
+		lblMarkerLabel.setBounds(12, 118, 57, 15);
+		panelMarkerParameter.add(lblMarkerLabel);
 		
-		textField_5 = new JTextField();
-		textField_5.setBounds(81, 124, 73, 21);
-		panel.add(textField_5);
-		textField_5.setColumns(10);
+		textFieldMarkerLabel = new JTextField();
+		textFieldMarkerLabel.setBounds(81, 122, 73, 21);
+		panelMarkerParameter.add(textFieldMarkerLabel);
+		textFieldMarkerLabel.setColumns(10);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setBounds(12, 208, 212, 210);
-		contentPanel.add(textArea);
+		JComboBox comboBoxMarkerColor = new JComboBox();
+		comboBoxMarkerColor.setBounds(12, 87, 57, 21);
+		panelMarkerParameter.add(comboBoxMarkerColor);
 		
-		JButton btnNewButton_1 = new JButton("New button");
-		btnNewButton_1.setBounds(344, 177, 57, 23);
-		contentPanel.add(btnNewButton_1);
+		JComboBox comboBoxMarkerLabel = new JComboBox();
+		comboBoxMarkerLabel.setBounds(22, 136, 47, 21);
+		panelMarkerParameter.add(comboBoxMarkerLabel);
 		
-		JComboBox comboBox_2 = new JComboBox();
-		comboBox_2.setBounds(301, 177, 36, 21);
-		contentPanel.add(comboBox_2);
+		JButton btnMarkerAdd = new JButton("Add");
+		btnMarkerAdd.setBounds(81, 155, 73, 23);
+		panelMarkerParameter.add(btnMarkerAdd);
 		
-		JComboBox comboBox_3 = new JComboBox();
-		comboBox_3.setBounds(245, 177, 44, 21);
-		contentPanel.add(comboBox_3);
+		JTextArea textAreaMarker = new JTextArea();
+		textAreaMarker.setBounds(12, 208, 212, 210);
+		contentPanel.add(textAreaMarker);
 		
-		JCheckBox chckbxNewCheckBox = new JCheckBox("New check box");
-		chckbxNewCheckBox.setBounds(8, 179, 115, 23);
-		contentPanel.add(chckbxNewCheckBox);
+		JCheckBox chckbxShowAllMarkers = new JCheckBox("Show All Markers");
+		chckbxShowAllMarkers.setBounds(8, 179, 133, 23);
+		contentPanel.add(chckbxShowAllMarkers);
+		
+		JButton btnMarkerDelete = new JButton("Delete");
+		btnMarkerDelete.setBounds(329, 208, 73, 23);
+		contentPanel.add(btnMarkerDelete);
+		
+		JButton btnMarekrsClear = new JButton("Clear");
+		btnMarekrsClear.setBounds(245, 208, 72, 23);
+		contentPanel.add(btnMarekrsClear);
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
