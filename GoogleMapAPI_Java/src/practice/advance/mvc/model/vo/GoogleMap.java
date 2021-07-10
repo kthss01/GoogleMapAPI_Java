@@ -1,12 +1,24 @@
 package practice.advance.mvc.model.vo;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
 public class GoogleMap {
 	private final static String BASIC_URL = "https://maps.googleapis.com/maps/api/staticmap";
+
+	private final static String[] MAPTYPES = { "roadmap", "maptype", "satellite", "terrain", "hybrid" };
+	private final static String[] MARKER_SIZE = new String[] { "normal", "mid", "small", "tiny" };
+	private final static String[] MARKER_COLOR = new String[] { "black", "brown", "green", "purple", "yellow", "blue",
+			"gray", "orange", "red", "white" };
+
+	private static ArrayList<String> markerLabel;
+
 	private String key;
 
 	private boolean isChanged; // 상태 변화시 체크
@@ -23,8 +35,30 @@ public class GoogleMap {
 	private StringBuilder sb;
 
 	public GoogleMap() {
-		key = JOptionPane.showInputDialog("key : ");
+		File f = new File("resources/key.secret");
+		if (f.exists()) {
+			readKey(f.getPath());
+		} else {
+			key = JOptionPane.showInputDialog("key : ");
+		}
+
 		markers = new Markers();
+
+		markerLabel = new ArrayList<String>();
+		for (int i = 0; i < 26; i++) {
+			markerLabel.add(String.valueOf((char) ('A' + i)));
+		}
+		for (int i = 0; i < 10; i++) {
+			markerLabel.add(String.valueOf(i));
+		}
+	}
+
+	private void readKey(String path) {
+		try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+			key = br.readLine();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public GoogleMap(String center, int zoom, int sizeX, int sizeY) {
@@ -42,6 +76,23 @@ public class GoogleMap {
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 		this.maptype = maptype;
+	}
+
+	public static String[] getMarkerLabel() {
+		return markerLabel.stream().toArray(String[]::new);
+//		return markerLabel.toArray(new String[markerLabel.size()]);
+	}
+
+	public static String[] getMarkerColor() {
+		return MARKER_COLOR;
+	}
+
+	public static String[] getMarkerSize() {
+		return MARKER_SIZE;
+	}
+
+	public static String[] getMaptypes() {
+		return MAPTYPES;
 	}
 
 	public Markers getMarkers() {
@@ -114,8 +165,8 @@ public class GoogleMap {
 
 	public void sample() {
 		zoom = 12;
-		sizeX = 2048;
-		sizeY = 2048;
+		sizeX = 512;
+		sizeY = 512;
 		isChanged = true;
 		center = "서울";
 	}
@@ -141,7 +192,7 @@ public class GoogleMap {
 
 		if (markers.getMarkers().size() != 0)
 			sb.append("markers=").append(markers.toString()).append("&");
-			
+
 		sb.append("key=").append(key);
 
 		return sb.toString();
