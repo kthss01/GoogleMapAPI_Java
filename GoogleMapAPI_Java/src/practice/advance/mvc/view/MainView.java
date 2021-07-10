@@ -29,6 +29,8 @@ public class MainView extends JFrame {
 	private JLabel googleMap = new JLabel();
 	private final JScrollPane scrollPane = new JScrollPane(googleMap);
 
+	private OptionDialog dialog = null;
+
 	public MainView() {
 		setTitle("Google Maps");
 		this.setBounds(600, 300, 0, 0);
@@ -51,23 +53,27 @@ public class MainView extends JFrame {
 			}
 		});
 		optButton.addMouseListener(new MouseAdapter() {
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				OptionDialog dialog = new OptionDialog();
-				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-				dialog.setVisible(true);
+				if (dialog == null) {
+					dialog = new OptionDialog();
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
 
-				dialog.addWindowListener(new WindowAdapter() {
+					dialog.addWindowListener(new WindowAdapter() {
 
-					@Override
-					public void windowClosed(WindowEvent e) {
-						if (GoogleMapTemplate.Map().isChanged()) {
-							ImageIcon icon = MainController.setMap(GoogleMapTemplate.Map().getCenter());
-							googleMap.setIcon(icon);
+						@Override
+						public void windowClosed(WindowEvent e) {
+							if (GoogleMapTemplate.Map().isChanged()) {
+								ImageIcon icon = MainController.setMap(GoogleMapTemplate.Map().getCenter());
+								googleMap.setIcon(icon);
+							}
+							dialog = null;
 						}
-					}
 
-				});
+					});
+				}
 			}
 		});
 

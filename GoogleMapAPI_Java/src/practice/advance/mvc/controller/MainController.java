@@ -5,6 +5,8 @@ import static practice.advance.mvc.common.GoogleMapTemplate.downloadMap;
 import static practice.advance.mvc.common.GoogleMapTemplate.fileDelete;
 import static practice.advance.mvc.common.GoogleMapTemplate.getMap;
 
+import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 
 import practice.advance.mvc.model.vo.GoogleMap;
@@ -24,33 +26,39 @@ public class MainController {
 	}
 
 	public static void addMarker(String location, String size, String color, String label) {
+
 		Marker marker = new Marker();
 
 		marker.setLocation(location);
-		// 기본값은 무시 안넣으면 기본값임
-		if (!size.equals(GoogleMap.getMarkerSize()[0]) && !size.equals("")) {
-			marker.setSize(size);
-		}
-		if (!color.equals("")) {
-			marker.setColor(color);
-		}
-		if (!label.equals("")) {
-			marker.setLabel(label);
+
+		marker.setSize(size);
+		marker.setColor(color);
+		marker.setLabel(label);
+
+		ArrayList<Marker> markers = Map().getMarkers().getMarkers();
+		boolean hasMarker = false;
+		for (Marker temp : markers) {
+			if (marker.equals(temp)) {
+				hasMarker = true;
+				temp.setLocation(marker.getLocation());
+				break;
+			}
 		}
 
-		Map().getMarkers().addMarker(marker);
+		if (!hasMarker)
+			Map().getMarkers().addMarker(marker);
 	}
 
 	public static void updateMap(String location, String sizeX, String sizeY, String zoomLevel, String maptype) {
 		Map().setChanged(true);
-		
+
 		Map().setCenter(location);
 		Map().setSizeX(Integer.parseInt(sizeX));
 		Map().setSizeY(Integer.parseInt(sizeY));
 		Map().setZoom(Integer.parseInt(zoomLevel));
 		// 기본값 무시
 		if (!maptype.equals(GoogleMap.getMaptypes()[0]))
-			Map().setMaptype(maptype);		
+			Map().setMaptype(maptype);
 	}
 
 }

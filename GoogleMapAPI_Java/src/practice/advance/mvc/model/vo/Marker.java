@@ -3,7 +3,7 @@ package practice.advance.mvc.model.vo;
 import java.util.ArrayList;
 
 public class Marker {
-	private String size = ""; // tiny, mid, small 중 하나 안쓰면 default(normal) "" 시 normal로 처리할 예정
+	private String size = GoogleMap.getMarkerSize()[0]; // tiny, mid, small 중 하나 안쓰면 default(normal) "" 시 normal로 처리할 예정
 	private String color = ""; // black, brown, green, purple, yellow, blue, gray, orange, red, white 중 하나 또는
 								// 0xFFFFCC 같은 32-bit hex color
 	private String label = ""; // A-Z, 0-9 대문자 하나 인거 같음 한글 되는진 모르겠음 tiny, small 시엔 안보임
@@ -45,6 +45,10 @@ public class Marker {
 	}
 
 	public String getLocation() {
+		return locations.get(0);
+	}
+
+	public String getLocations() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < locations.size(); i++) {
 			sb.append(locations.get(i));
@@ -62,18 +66,30 @@ public class Marker {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("markers=");
-		
-		if (!size.equals(""))
-			sb.append("size:").append(size).append("%7C");
+
+		String temp = size;
+
+		if (size.equals(GoogleMap.getMarkerSize()[0]))
+			temp = "";
+
+		if (!temp.equals(""))
+			sb.append("size:").append(temp).append("%7C");
 		if (!color.equals(""))
 			sb.append("color:").append(color).append("%7C");
 		if (!label.equals(""))
 			sb.append("label:").append(label).append("%7C");
-	
+
 		// location
-		sb.append(getLocation());
+		sb.append(getLocations());
 
 		return sb.toString();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		Marker mark = (Marker) obj;
+
+		return mark.getSize().equals(size) && mark.getColor().equals(color) && mark.getLabel().equals(label);
 	}
 
 }

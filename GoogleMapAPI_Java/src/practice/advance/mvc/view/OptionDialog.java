@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -19,6 +20,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import practice.advance.mvc.common.GoogleMapTemplate;
 import practice.advance.mvc.controller.MainController;
@@ -37,7 +40,7 @@ public class OptionDialog extends JDialog {
 
 	private JComboBox<String> comboBoxMaptype;
 
-	private JList listMarker;
+	private JList<String> listMarker;
 
 	private JComboBox<String> comboBoxMarkerSize;
 	private JComboBox<String> comboBoxMarkerColor;
@@ -57,6 +60,7 @@ public class OptionDialog extends JDialog {
 	private DefaultComboBoxModel<String> markerSizeModel;
 	private DefaultComboBoxModel<String> markerColorModel;
 	private DefaultComboBoxModel<String> markerLabelModel;
+	private DefaultListModel<String> markerListModel;
 
 	public OptionDialog() {
 		setBounds(100, 100, 430, 500);
@@ -109,8 +113,21 @@ public class OptionDialog extends JDialog {
 		lblMaptype.setBounds(12, 141, 57, 15);
 		contentPanel.add(lblMaptype);
 
-		listMarker = new JList();
+		listMarker = new JList<String>();
+		markerListModel = new DefaultListModel<String>();
+		listMarker.setModel(markerListModel);
 		listMarker.setBounds(245, 241, 156, 177);
+		listMarker.addListSelectionListener(new ListSelectionListener() {
+
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (!chckbxShowAllMarkers.isSelected() && listMarker.getSelectedIndex() != -1) {
+					GoogleMap map = GoogleMapTemplate.Map();
+					ArrayList<Marker> markers = map.getMarkers().getMarkers();
+					textAreaMarker.setText(markers.get(listMarker.getSelectedIndex()).toString());
+				}
+			}
+		});
 		contentPanel.add(listMarker);
 
 		JPanel panelMarkerParameter = new JPanel();
@@ -177,24 +194,50 @@ public class OptionDialog extends JDialog {
 				String label = (String) markerLabelModel.getSelectedItem();
 
 				MainController.addMarker(location, size, color, label);
+
+				updateMarkerList();
 			}
 		});
 		btnMarkerAdd.setBounds(81, 155, 73, 23);
 		panelMarkerParameter.add(btnMarkerAdd);
 
 		textAreaMarker = new JTextArea();
+		textAreaMarker.setLineWrap(true);
 		textAreaMarker.setBounds(12, 208, 212, 210);
 		contentPanel.add(textAreaMarker);
 
 		chckbxShowAllMarkers = new JCheckBox("Show All Markers");
+		chckbxShowAllMarkers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (chckbxShowAllMarkers.isSelected()) {
+					textAreaMarker.setText(GoogleMapTemplate.Map().getMarkers().toString());
+				}
+			}
+		});
 		chckbxShowAllMarkers.setBounds(8, 179, 133, 23);
 		contentPanel.add(chckbxShowAllMarkers);
 
 		btnMarkerDelete = new JButton("Delete");
+		btnMarkerDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int index = listMarker.getSelectedIndex();
+				if (index != -1) {
+					GoogleMapTemplate.Map().getMarkers().getMarkers().remove(index);
+					updateMarkerList();
+				}
+
+			}
+		});
 		btnMarkerDelete.setBounds(329, 208, 73, 23);
 		contentPanel.add(btnMarkerDelete);
 
 		btnMarekrsClear = new JButton("Clear");
+		btnMarekrsClear.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GoogleMapTemplate.Map().getMarkers().getMarkers().clear();
+				updateMarkerList();
+			}
+		});
 		btnMarekrsClear.setBounds(245, 208, 72, 23);
 		contentPanel.add(btnMarekrsClear);
 
@@ -257,10 +300,23 @@ public class OptionDialog extends JDialog {
 		markerColorModel.setSelectedItem(GoogleMap.getMarkerColor()[0]);
 		markerLabelModel.setSelectedItem(GoogleMap.getMarkerLabel()[0]);
 
+		updateMarkerList();
+	}
+
+	private void updateMarkerList() {
+		markerListModel.clear();
+
+		GoogleMap map = GoogleMapTemplate.Map();
+
 		ArrayList<Marker> markers = map.getMarkers().getMarkers();
 		// 마커가 있으면 처리
 		if (markers.size() > 0) {
-
+			for (int i = 0; i < markers.size(); i++) {
+				markerListModel.addElement(String.format("markers_%d", i));
+			}
 		}
+
+		if (!chckbxShowAllMarkers.isSelected())
+			textAreaMarker.setText("");
 	}
 }
