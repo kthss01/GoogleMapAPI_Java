@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 public class GoogleMap {
 	private final static String BASIC_URL = "https://maps.googleapis.com/maps/api/staticmap";
 
-	private final static String[] MAPTYPES = { "roadmap", "maptype", "satellite", "terrain", "hybrid" };
+	private final static String[] MAPTYPES = { "roadmap", "satellite", "terrain", "hybrid" };
 	private final static String[] MARKER_SIZE = new String[] { "normal", "mid", "small", "tiny" };
 	private final static String[] MARKER_COLOR = new String[] { "black", "brown", "green", "purple", "yellow", "blue",
 			"gray", "orange", "red", "white" };
@@ -111,14 +111,6 @@ public class GoogleMap {
 		this.maptype = maptype;
 	}
 
-	public String getKey() {
-		return key;
-	}
-
-	public void setKey(String key) {
-		this.key = key;
-	}
-
 	public String getCenter() {
 		return center;
 	}
@@ -191,7 +183,7 @@ public class GoogleMap {
 			sb.append("maptype=").append(maptype).append("&");
 
 		if (markers.getMarkers().size() != 0)
-			sb.append("markers=").append(markers.toString()).append("&");
+			sb.append(markers.toString()).append("&");
 
 		sb.append("key=").append(key);
 

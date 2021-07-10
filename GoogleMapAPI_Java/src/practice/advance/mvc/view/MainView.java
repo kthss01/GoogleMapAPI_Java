@@ -1,9 +1,6 @@
 package practice.advance.mvc.view;
 
-import static practice.advance.mvc.common.GoogleMapTemplate.Map;
-import static practice.advance.mvc.common.GoogleMapTemplate.downloadMap;
-import static practice.advance.mvc.common.GoogleMapTemplate.fileDelete;
-import static practice.advance.mvc.common.GoogleMapTemplate.getMap;
+import practice.advance.mvc.common.GoogleMapTemplate;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -12,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -19,6 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+
+import practice.advance.mvc.controller.MainController;
 
 public class MainView extends JFrame {
 	private JTextField textField = new JTextField(30);
@@ -29,16 +29,6 @@ public class MainView extends JFrame {
 	private JLabel googleMap = new JLabel();
 	private final JScrollPane scrollPane = new JScrollPane(googleMap);
 
-	public void setMap(String location) {
-		Map().setCenter(location);
-		
-		downloadMap();
-		googleMap.setIcon(getMap());
-		fileDelete();
-
-		
-	}
-
 	public MainView() {
 		setTitle("Google Maps");
 		this.setBounds(600, 300, 0, 0);
@@ -48,14 +38,16 @@ public class MainView extends JFrame {
 //		setResizable(false);
 
 		scrollPane.setPreferredSize(new Dimension(400, 400));
-		
+
 		panel.add(textField);
 		panel.add(button);
 		panel.add(optButton);
 		button.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				setMap(textField.getText());
+				GoogleMapTemplate.Map().setChanged(true);
+				ImageIcon icon = MainController.setMap(textField.getText());
+				googleMap.setIcon(icon);
 			}
 		});
 		optButton.addMouseListener(new MouseAdapter() {
@@ -64,22 +56,23 @@ public class MainView extends JFrame {
 				OptionDialog dialog = new OptionDialog();
 				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				dialog.setVisible(true);
-				
+
 				dialog.addWindowListener(new WindowAdapter() {
 
 					@Override
 					public void windowClosed(WindowEvent e) {
-						setMap(Map().getCenter());
+						if (GoogleMapTemplate.Map().isChanged()) {
+							ImageIcon icon = MainController.setMap(GoogleMapTemplate.Map().getCenter());
+							googleMap.setIcon(icon);
+						}
 					}
-					
+
 				});
 			}
 		});
 
 		getContentPane().add(BorderLayout.NORTH, panel);
-		
-//		scrollPane.setViewportView(googleMap);
-		
+
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		pack();
 	}

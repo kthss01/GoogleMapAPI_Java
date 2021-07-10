@@ -29,6 +29,7 @@ public class GoogleMapTemplate {
 		
 		try {
 			String imageURL = map.toString();
+			System.out.println(imageURL); // test
 			URL url = new URL(imageURL);
 			InputStream is = url.openStream();
 			OutputStream os = new FileOutputStream(map.getCenter());
