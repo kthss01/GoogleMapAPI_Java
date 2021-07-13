@@ -56,9 +56,8 @@ public class MainController {
 		Map().setSizeX(Integer.parseInt(sizeX));
 		Map().setSizeY(Integer.parseInt(sizeY));
 		Map().setZoom(Integer.parseInt(zoomLevel));
-		// 기본값 무시
-		if (!maptype.equals(GoogleMap.getMaptypes()[0]))
-			Map().setMaptype(maptype);
+		
+		Map().setMaptype(maptype);
 	}
 
 }
